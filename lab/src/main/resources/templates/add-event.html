@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+
+</head>
+
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <form th:action="@{/events/add}" method="POST">
+        <label for="name">Name:</label>
+        <input name="name" type="text" id="name" th:value="(${event} != null ? ${event.getName()} : '')">
+        <label for="description">Description:</label>
+        <input name="description" type="text" id="description" th:value="(${event} != null ? ${event.getDescription()} : '')">
+        <div th:if="${event} == null">
+          <label for="popularityScore">Rating:</label>
+          <input name="popularityScore" type="text" id="popularityScore">
+        </div>
+        <input style="display: none" type="text" th:if="${event} != null" name="popularityScore" th:value="${event.getPopularityScore()}">
+        <select name="locationId">
+          <option th:if="${event} != null"
+                  th:selected="${event.getLocation() != null && event.getLocation().getId() == loc.getId()}"
+                  th:each="loc : ${locations}"
+                  th:value="${loc.getId()}"
+                  th:text="${loc.getName()}">
+          </option>
+          <option th:if="${event} == null"
+                  th:each="loc: ${locations}"
+                  th:value="${loc.getId()}"
+                  th:text="${loc.getName()}">
+          </option>
+        </select>
+
+        <input style="display: none" th:if="${event} != null" name="eventId" th:value="${event.getId()}">
+        <input type="submit">
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
