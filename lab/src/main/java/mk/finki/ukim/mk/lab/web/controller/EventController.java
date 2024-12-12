@@ -79,13 +79,13 @@ public class EventController {
     @PostMapping("/search")
     public String searchEvents(@RequestParam(required = false) String eventName, @RequestParam(required = false) String popularityScore, @RequestParam(required = false) String locationId, Model model){
         List<Event> events = new ArrayList<>();
-        if(eventName != null && popularityScore == null && locationId == null){
+        if(!eventName.isEmpty() && popularityScore.isEmpty() && locationId == null){
             events = this.eventService.searchEvents(eventName);
         }
-        else if(eventName == null && popularityScore != null && locationId == null){
+        else if(eventName.isEmpty() && !popularityScore.isEmpty() && locationId.isEmpty()){
             events = this.eventService.searchRatings(Double.parseDouble(popularityScore));
         }
-        else if(eventName == null && popularityScore == null && locationId != null){
+        else if(eventName.isEmpty() && popularityScore.isEmpty() && !locationId.isEmpty()){
             events = this.eventService.searchByLocationId(Long.parseLong(locationId));
         }
         model.addAttribute("events", events);

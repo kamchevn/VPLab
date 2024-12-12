@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,8 +21,8 @@ public class Location {
     private String address;
     private String capacity;
     private String description;
-
-    @OneToMany(mappedBy = "location")
+    @JsonBackReference
+    @OneToMany(mappedBy = "location", fetch=FetchType.LAZY)
     private List<Event> events;
 
     public Location(String name, String address, String capacity, String description) {
@@ -29,5 +30,6 @@ public class Location {
         this.address = address;
         this.capacity = capacity;
         this.description = description;
+        this.events=new ArrayList<>();
     }
 }

@@ -1,6 +1,5 @@
 package mk.finki.ukim.mk.lab.service.implementation;
 
-import mk.finki.ukim.mk.lab.boostrap.DataHolder;
 import mk.finki.ukim.mk.lab.model.Event;
 import mk.finki.ukim.mk.lab.model.Location;
 import mk.finki.ukim.mk.lab.model.exceptions.EventNotFoundException;
@@ -44,7 +43,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> searchByLocationId(Long locationId) {
-        return eventRepository.findAllByLocation_Id(locationId);
+        return eventRepository.findAllByLocationId(locationId);
     }
 
     @Override
