@@ -4,6 +4,7 @@ import mk.finki.ukim.mk.lab.model.Event;
 import mk.finki.ukim.mk.lab.model.exceptions.EventNotFoundException;
 import mk.finki.ukim.mk.lab.service.EventService;
 import mk.finki.ukim.mk.lab.service.LocationService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +33,13 @@ public class EventController {
         return "listEvents";
     }
     @GetMapping("/add-form")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getAddEventsPage(Model model){
         model.addAttribute("locations",this.locationService.findAll());
         return "add-event";
     }
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveEvent(@RequestParam String name,
                            @RequestParam String description,
                            @RequestParam double popularityScore,
@@ -51,16 +54,19 @@ public class EventController {
         return "redirect:/events";
     }
     @GetMapping("/delete-form/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteEvent(@PathVariable Long id, Model model) {
         model.addAttribute("eventId",id);
         return "delete-form";
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteEvent(@PathVariable Long id) {
         this.eventService.deleteEvent(id);
         return "redirect:/events";
     }
     @GetMapping("/edit-form/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getEditEventForm(@PathVariable Long id, Model model) {
         Event event = eventService.getEventById(id).orElseThrow(() -> new EventNotFoundException(id));
         if (event == null) {
@@ -79,7 +85,7 @@ public class EventController {
     @PostMapping("/search")
     public String searchEvents(@RequestParam(required = false) String eventName, @RequestParam(required = false) String popularityScore, @RequestParam(required = false) String locationId, Model model){
         List<Event> events = new ArrayList<>();
-        if(!eventName.isEmpty() && popularityScore.isEmpty() && locationId == null){
+        if(!eventName.isEmpty() && popularityScore.isEmpty() && locationId.isEmpty()){
             events = this.eventService.searchEvents(eventName);
         }
         else if(eventName.isEmpty() && !popularityScore.isEmpty() && locationId.isEmpty()){
@@ -90,5 +96,9 @@ public class EventController {
         }
         model.addAttribute("events", events);
         return "listEvents";
+    }
+    @GetMapping("/login")
+    public String getLogin(){
+        return "login";
     }
 }

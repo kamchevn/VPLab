@@ -23,6 +23,6 @@ public class EventRestController {
     }
     @GetMapping("/search/test")
     public List<Event> getAllByName(){
-        return eventService.searchByLocationId(Long.parseLong("5"));
+        return eventService.searchEvents("J-Fest");
     }
 }

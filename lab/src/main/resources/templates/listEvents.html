@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <title>Event Booking page - Welcome and choose an Event</title>
@@ -40,8 +40,8 @@
             Rating: <span th:text="${event.popularityScore}"></span>,
             Location: <span th:text="${event.location.name}"></span>, <span th:text="${event.location.address}"></span>
         </label>
-        <a th:href="@{'/events/edit-form/{id}' (id=${event.getId()})}">Edit</a>
-        <a th:href="@{'/events/delete-form/{id}' (id=${event.getId()})}">Delete</a>
+        <a th:href="@{'/events/edit-form/{id}' (id=${event.getId()})}" sec:authorize="hasRole('ROLE_ADMIN')">Edit</a>
+        <a th:href="@{'/events/delete-form/{id}' (id=${event.getId()})}" sec:authorize="hasRole('ROLE_ADMIN')">Delete</a>
         <a th:href="@{'/events/like/{id}' (id=${event.getId()})}">Like</a>
     </div>
 
@@ -57,7 +57,7 @@
     </form>
     <br/>
     <div>
-        <a th:href="@{/events/add-form}"><button>Add new course</button></a>
+        <a th:href="@{/events/add-form}" sec:authorize="hasRole('ROLE_ADMIN')"><button>Add new course</button></a>
     </div>
 
 </main>
